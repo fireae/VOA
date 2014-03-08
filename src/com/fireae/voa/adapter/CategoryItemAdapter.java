@@ -2,8 +2,10 @@ package com.fireae.voa.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,9 @@ import android.widget.Toast;
 
 import com.fireae.*;
 import com.fireae.voa.R;
+import com.fireae.voa.activity.CategoryActivity;
+import com.fireae.voa.activity.ContentListActivity;
+import com.fireae.voa.data.ResData;
 
 public class CategoryItemAdapter extends BaseAdapter {
 
@@ -72,7 +77,10 @@ public class CategoryItemAdapter extends BaseAdapter {
 			viewHolder.txtCategoryTitle = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
 			viewHolder.imgViewBG = (ImageView)convertView.findViewById(R.id.imgViewBG);
 			
-			//convertView.setBackgroundResource(R.drawable.bg_01);
+			Random rand = new Random(5);
+			int iBgColor = rand.nextInt(5);
+			System.out.println(iBgColor);
+			convertView.setBackgroundResource(ResData.iBgRes[iBgColor]);
 			convertView.setTag(viewHolder);
 			
 		} else {
@@ -85,7 +93,9 @@ public class CategoryItemAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(mContext, "voa1", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent();
+				intent.setClass(mContext, ContentListActivity.class);
+				mContext.startActivity(intent);
 			}
 			
 		});
