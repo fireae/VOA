@@ -7,11 +7,13 @@ import com.fireae.voa.R.layout;
 import com.fireae.voa.R.menu;
 import com.fireae.voa.adapter.CategoryGridItem;
 import com.fireae.voa.adapter.CategoryItemAdapter;
+import com.fireae.voa.data.VOAData;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,6 +27,8 @@ public class CategoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.activity_category);
 		
 		gridView = (GridView)findViewById(R.id.category_grid);
@@ -62,9 +66,10 @@ public class CategoryActivity extends Activity {
 		};
 		gridItemList = new ArrayList<CategoryGridItem>();
 		
-		for (int i = 0; i < titles.length; i++) {
+		for (int i = 0; i < VOAData.strCategories.length; i++) {
 			CategoryGridItem item = new CategoryGridItem();
-			item.setTitle(titles[i]);
+			item.setCategoryTitle(VOAData.strCategories[i]);
+			item.setCategoryBaseUrl(VOAData.strCategoryUrls[i]);
 			item.setIndex(i);
 			gridItemList.add(item);
 		} 

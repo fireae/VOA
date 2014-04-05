@@ -3,6 +3,7 @@ package com.fireae.voa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.firea.voa.parser.CategoryParser;
 import com.fireae.voa.R;
 import com.fireae.voa.R.layout;
 import com.fireae.voa.R.menu;
@@ -10,32 +11,59 @@ import com.fireae.voa.adapter.CategoryGridItem;
 import com.fireae.voa.adapter.CategoryItemAdapter;
 import com.fireae.voa.adapter.ContentListItem;
 import com.fireae.voa.adapter.ContentListItemAdapter;
+import com.fireae.voa.ui.RefreshableView;
+import com.fireae.voa.ui.RefreshableView.PullToRefreshListener;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.Window;
 import android.widget.ListView;
 
 public class ContentListActivity extends Activity {
 
 	private ListView list_content;
+	private Handler handler;
+	private List<ContentListItem> contentList;
+	private String baseUrl;
+	private ContentListItemAdapter adapter;
+	private RefreshableView refreshableView;
+	
 	//private ContentListItemAdapter adapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.activity_content_list);
+		refreshableView = (RefreshableView)findViewById(R.id.refreshable_view);
 		
 		list_content = (ListView)findViewById(R.id.list_content);
+		refreshableView.setOnRefreshListener(new PullToRefreshListener(){
+
+			@Override
+			public void onRefresh() {
+				// TODO Auto-generated method stub
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}, 0);
 		
-		List<ContentListItem> contentList = new ArrayList<ContentListItem>();
-		for (int i = 0; i < 3; i++) {
-			ContentListItem item = new ContentListItem();
-			item.setTitle("this is a test");
-			contentList.add(item);
-		}
-		List<ContentListItem> l = new ArrayList<ContentListItem>();
-		ContentListItemAdapter adapter = new ContentListItemAdapter(this, l);
-		list_content.setAdapter(adapter);
+		
+		Intent intent = getIntent();
+		Bundle bundle = intent.getExtras();
+		baseUrl = bundle.getString("baseUrl");
+		handler = new Handler();
+		adapter = new ContentListItemAdapter(this);
+		
+		new Thread(new ThreadLoadList()).start();
 	}
 
 	@Override
@@ -45,4 +73,28 @@ public class ContentListActivity extends Activity {
 		return true;
 	}
 
+	
+	public class ThreadLoadList implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			CategoryParser categoryParser = new CategoryParser(baseUrl);
+			categoryParser.setCategoryPage(1);
+			contentList = categoryParser.getContentListItem();
+			handler.post(new Thread(new Runnable(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					adapter.setContentList(contentList);
+					list_content.setAdapter(adapter);
+				}
+				
+			}));
+			
+		}
+		
+	}
+	
 }

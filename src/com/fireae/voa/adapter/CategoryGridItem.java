@@ -1,24 +1,25 @@
 package com.fireae.voa.adapter;
 
 public class CategoryGridItem {
-	private String title;
+	private String categoryTitle;
 	private int index;
+	private String categoryBaseUrl;
 
 	public CategoryGridItem() {
-		this.title = "voa";
+		this.categoryTitle = "voa";
 	}
 	
 	public CategoryGridItem(String title) {
 		super();
-		this.title = title;
+		this.categoryTitle = title;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getCategoryTitle() {
+		return categoryTitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setCategoryTitle(String categoryTitle) {
+		this.categoryTitle = categoryTitle;
 	}
 
 	public int getIndex() {
@@ -28,5 +29,14 @@ public class CategoryGridItem {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-		
+
+	public String getCategoryBaseUrl() {
+		return categoryBaseUrl;
+	}
+
+	public void setCategoryBaseUrl(String categoryBaseUrl) {
+		this.categoryBaseUrl = categoryBaseUrl;
+	}
+
+	
 }

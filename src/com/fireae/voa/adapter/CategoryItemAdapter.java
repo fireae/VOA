@@ -7,6 +7,7 @@ import java.util.Random;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,8 +75,8 @@ public class CategoryItemAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.category_grid_item, null);
 			
 			viewHolder = new ViewHolder();
+			//viewHolder.imgViewBG = (ImageView)convertView.findViewById(R.id.imgViewBG);
 			viewHolder.txtCategoryTitle = (TextView)convertView.findViewById(R.id.txtCategoryTitle);
-			viewHolder.imgViewBG = (ImageView)convertView.findViewById(R.id.imgViewBG);
 			
 			Random rand = new Random(5);
 			int iBgColor = rand.nextInt(5);
@@ -87,7 +88,8 @@ public class CategoryItemAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 		
-		viewHolder.txtCategoryTitle.setText(gridItemList.get(position).getTitle());
+		viewHolder.txtCategoryTitle.setText(gridItemList.get(position).getCategoryTitle());
+		final String baseUrl = gridItemList.get(position).getCategoryBaseUrl();
 		viewHolder.txtCategoryTitle.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -95,6 +97,9 @@ public class CategoryItemAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent();
 				intent.setClass(mContext, ContentListActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putString("baseUrl", baseUrl);
+				intent.putExtras(bundle);
 				mContext.startActivity(intent);
 			}
 			
